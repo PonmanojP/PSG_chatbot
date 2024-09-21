@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        /* Styles for the chatbot interface */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 10px;
+            background-color: #f4f4f9;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #send-button, #voice-button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        #send-button:hover, #voice-button:hover {
+            background-color: #0056b3;
+        }
+
+        .user-message, .bot-message {
+            margin-bottom: 15px;
+        }
+
+        .user-message {
+            text-align: right;
+        }
+
+        .bot-message {
+            text-align: left;
+            color: #007bff;
+        }
+
+        .message {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px;
+            background-color: #f1f1f1;
+        }
+
+        .bot-message .message {
+            background-color: #e1f5fe;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="input-area">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+            <button id="voice-button" onclick="sendVoiceMessage()">🎤</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+
+        function appendMessage(text, type) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add(type + '-message');
+            messageElement.innerHTML = `<span class="message">${text}</span>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll to the bottom
+        }
+
+        // Send message via text input
+        async function sendMessage() {
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
+            
+            appendMessage(userMessage, 'user');
+            chatInput.value = '';
+
+            // Make POST request to Flask API
+            const response = await fetch('http://127.0.0.1:5000/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input_type: 'text', query: userMessage })
+            });
+
+            const data = await response.json();
+            console.log(data)
+            if (data.answer) {
+                appendMessage(data.answer, 'bot');
+            } else {
+                appendMessage('Sorry, I couldn’t find an answer.', 'bot');
+            }
+        }
+
+        // Simulate sending a voice message (implement voice recognition as needed)
+        async function sendVoiceMessage() {
+            appendMessage('Voice message feature is under development.', 'bot');
+            // You can add functionality here to handle voice recognition and send it to your API.
+        }
+    </script>
+</body>
+</html>
