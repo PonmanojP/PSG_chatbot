@@ -1,8 +1,7 @@
 Flask
 torch
 transformers
-scipy
-speech_recognition
+SpeechRecognition
 pyttsx3
 flask_cors
 gunicorn
