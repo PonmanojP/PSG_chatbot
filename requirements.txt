@@ -1,8 +1,8 @@
-Flask==2.3.2
-torch==2.1.0
-transformers==4.30.0
-scipy==1.11.1
-speech_recognition==3.9.0
-pyttsx3==2.90
-flask_cors==3.1.1
-gunicorn==20.1.0
+Flask
+torch
+transformers
+scipy
+speech_recognition
+pyttsx3
+flask_cors
+gunicorn
