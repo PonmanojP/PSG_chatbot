@@ -100,5 +100,4 @@ def query():
     else:
         return jsonify({'message': 'Query not provided.'}), 400
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
