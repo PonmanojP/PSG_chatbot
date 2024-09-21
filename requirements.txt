@@ -5,3 +5,4 @@ SpeechRecognition
 pyttsx3
 flask_cors
 gunicorn
+scipy
